@@ -1,5 +1,7 @@
 package br.com.alura.screenmatch.modelos;
 
+import br.com.alura.screenmatch.execao.ErroDeconversaoDeAnoException;
+
 public class Titulo implements Comparable<Titulo>{
     private String nome;
     private int anoDeLancamento;
@@ -7,6 +9,18 @@ public class Titulo implements Comparable<Titulo>{
     private double somaDasAvaliacoes;
     private int totalDeAvaliacoes;
     private int duracaoEmMinutos;
+
+
+
+    public Titulo(TItuloOmdb meuTituloOmdb) {
+        this.nome = meuTituloOmdb.title();
+        if (meuTituloOmdb.year().length() > 4) {
+            throw new ErroDeconversaoDeAnoException("Não consegui converter o ano porque tem mais de 4 caracteres.");
+        }
+        this.anoDeLancamento = Integer.valueOf(meuTituloOmdb.year());
+
+        this.duracaoEmMinutos = Integer.valueOf(meuTituloOmdb.runtime().substring(0, 2));
+    }
 
     @Override
     public int compareTo(Titulo outroTitulo) {
@@ -71,6 +85,12 @@ public class Titulo implements Comparable<Titulo>{
     }
     public double pegaMedia(){
         return somaDasAvaliacoes / totalDeAvaliacoes;
+    }
+    @Override
+    public String toString() {
+        return "Título: '" + nome + '\'' +
+                ", Ano de Lançamento: " + anoDeLancamento +
+                ", Duração: " + duracaoEmMinutos + " minutos";
     }
 }
 
